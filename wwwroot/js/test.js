@@ -3,11 +3,21 @@ var heckCount = 1;
 var writeHeckDisplay = function(data){
     $("#heckdisplay").empty();
     data.forEach(function(item){
-        $("#heckdisplay").append(item);
+        $("#heckdisplay").append(`<li>${item}</li>`);
     })
 }
 
 $(document).ready(function(){
+    $("#heck-number-update").submit(function(event){
+        event.preventDefault();
+        var newHecks = parseInt($("#heck-number-update input[name=heck-count]").val());
+        if(!isNaN(newHecks)){
+            if(newHecks > 0){
+                heckCount = newHecks;
+            }
+        }
+        console.log(`Heck Count: ${heckCount}`);
+    });
     $("button[name=random-number-button]").click(function(event){
         $.ajax({
             url: "/rand",
