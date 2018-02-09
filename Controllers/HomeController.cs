@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using Test.Models;
+using System.Collections.Generic;
 
 namespace Test.Controllers
 {
@@ -21,16 +22,22 @@ namespace Test.Controllers
         }
 
         [HttpPost("/heck")]
-        public ActionResult Heck(int numberOfHecks)
+        public ActionResult Heck(int numberOfHecks, Dictionary<string, Object> data)
         {
-            Helper.GiveSomeHecks(numberOfHecks);
-            string[] hecks = new string[Helper.HeckCount];
-            for(int i = 0; i < hecks.Length; i++)
+            List<string> keys = new List<string>(data.Keys);
+            Console.WriteLine(keys.Count);
+            foreach (string s in keys)
             {
-                hecks[i] = $"Heck the number {i + 1}";
+                Console.WriteLine(s);
+                Console.WriteLine(data[s]);
             }
+            Helper.GiveSomeHecks(numberOfHecks);
 
-            return Json(hecks);
+            Dictionary<string, int> dict = new Dictionary<string, int>();
+            dict.Add("hecks", Helper.HeckCount);
+            dict.Add("current-hecks", numberOfHecks);
+
+            return Json(dict);
         }
     }
 }

@@ -1,9 +1,18 @@
 var heckCount = 1;
 
+var ಠ_ಠ = function(){
+    alert ("Unknown error");
+}
+
+var test = function(){
+    console.log("test");
+}
+
 var writeHeckDisplay = function(data){
     $("#heckdisplay").empty();
     data.forEach(function(item){
-        $("#heckdisplay").append(`<li>${item}</li>`);
+        var times = item.split("Heck the number ")[1];
+        $("#heckdisplay").append(`<li>${"🤔".repeat(times)}</li>`);
     })
 }
 
@@ -25,20 +34,19 @@ $(document).ready(function(){
             success: function(data){
                 console.log(data);
             },
-            error: function(){
-                console.log("Didn't work");
-            }
+            error: ಠ_ಠ
         });
     });
     $("button[name=heck-button]").click(function(event){
         $.ajax({
             url: "/heck",
             type: "POST",
-            data: {numberOfHecks: heckCount},
-            success: writeHeckDisplay,
-            error: function(){
-                console.log("Post didn't work");
-            }
+            data: {numberOfHecks: heckCount,
+                data: {name: "fred", occupation: "some guy", dogs: 3, action: test}},
+            success: function(data){
+                console.log(data);
+            },
+            error: ಠ_ಠ
         });
     });
 });
