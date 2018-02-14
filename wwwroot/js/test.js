@@ -42,7 +42,7 @@ $(document).ready(function(){
             url: "/heck",
             type: "POST",
             data: {numberOfHecks: heckCount,
-                data: {name: "fred", occupation: "some guy", dogs: 3, action: test}},
+                data: {name: "fred", occupation: "some guy", dogs: "3", action: "hi"}},
             success: function(data){
                 console.log(data);
             },

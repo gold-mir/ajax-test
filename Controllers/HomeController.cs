@@ -22,15 +22,22 @@ namespace Test.Controllers
         }
 
         [HttpPost("/heck")]
-        public ActionResult Heck(int numberOfHecks, Dictionary<string, Object> data)
+        public ActionResult Heck(int numberOfHecks, Dictionary<string, string> data)
         {
-            List<string> keys = new List<string>(data.Keys);
-            Console.WriteLine(keys.Count);
-            foreach (string s in keys)
+            try
             {
-                Console.WriteLine(s);
-                Console.WriteLine(data[s]);
+                foreach (KeyValuePair<string, string> pair in data)
+                {
+                    Console.WriteLine($"Key: {pair.Key} Value: {pair.Value}");
+                }
+            } catch (Exception e)
+            {
+                Console.WriteLine($"Message: {e.Message}");
+                Console.WriteLine($"Source: {e.Source}");
+                Console.WriteLine($"StackTrace: {e.StackTrace}");
             }
+
+
             Helper.GiveSomeHecks(numberOfHecks);
 
             Dictionary<string, int> dict = new Dictionary<string, int>();
