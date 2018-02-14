@@ -44,7 +44,12 @@ namespace Test.Controllers
             dict.Add("hecks", Helper.HeckCount);
             dict.Add("current-hecks", numberOfHecks);
 
-            return Json(dict);
+            Cat cat = new Cat("Catto");
+            cat.favoriteFoods.Add("Muffins");
+            cat.favoriteFoods.Add("Mice");
+            cat.data.Add("Number of Monkeys", "Three Monkeys");
+
+            return Json(cat);
         }
     }
 }
