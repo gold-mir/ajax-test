@@ -1,5 +1,5 @@
 var heckCount = 1;
-
+var cat;
 var ಠ_ಠ = function(){
     alert ("Unknown error");
 }
@@ -17,6 +17,23 @@ var writeHeckDisplay = function(data){
 }
 
 $(document).ready(function(){
+
+    $("button[name=send-cat]").click(function(event){
+        var thing = {Name: "Heck", Stuff: [1, 2, 3, 4, 5]};
+        console.log(JSON.stringify(thing));
+        $.ajax({
+            url: "/catto",
+            type: "POST",
+            traditional: true,
+            dataType: "json",
+            data: {input: [JSON.stringify(cat)]},
+            success: function(data){
+                console.log(data);
+            },
+            error: ಠ_ಠ
+        });
+    });
+
     $("#heck-number-update").submit(function(event){
         event.preventDefault();
         var newHecks = parseInt($("#heck-number-update input[name=heck-count]").val());
@@ -41,10 +58,12 @@ $(document).ready(function(){
         $.ajax({
             url: "/heck",
             type: "POST",
-            data: {numberOfHecks: heckCount,
-                data: {name: "fred", occupation: "some guy", dogs: "3", action: "hi"}},
+            data: {
+                numberOfHecks: heckCount,
+                data: {name: "fred", occupation: "some guy", dogs: "3", action: "hi", stuff: [1, 2, 3, 4]}
+            },
             success: function(data){
-                console.log(data);
+                cat = data;
             },
             error: ಠ_ಠ
         });

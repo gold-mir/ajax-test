@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using Test.Models;
 using System.Collections.Generic;
+using System.Json;
+using Newtonsoft.Json;
 
 namespace Test.Controllers
 {
@@ -19,6 +21,18 @@ namespace Test.Controllers
             int number = Helper.GetRandomNumber();
             Console.WriteLine($"Heckin got a random number and it was {number}!");
             return number;
+        }
+
+        [HttpPost("/catto")]
+        public JsonResult AddCatto(string[] input)
+        {
+
+            Cat cat = JsonConvert.DeserializeObject<Cat>(input[0]);
+
+            Console.WriteLine($"Kitty Name: {cat.name}");
+            Console.WriteLine($"Kitty Breed: {cat.breed}");
+
+            return Json(true);
         }
 
         [HttpPost("/heck")]

@@ -18,5 +18,10 @@ namespace Test.Models
             this.age = 4;
             this.canFly = true;
         }
+
+        public override string ToString()
+        {
+            return $"Cat name={name} age={age} and some other stuff.";
+        }
     }
 }
