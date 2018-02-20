@@ -27,7 +27,6 @@ function getAllCardsFromScryfallQuery(queryString, finished, cards = []){
         success: function(result)
         {
             cards.push.apply(cards, result.data);
-
             if(result.has_more){
                 setTimeout(function(){getAllCardsFromScryfallQuery(result.next_page, finished, cards);}, 50);
             } else {
@@ -54,22 +53,32 @@ function setTempOutputAndPrintAllCards(cards){
         console.log(`Name: ${card.name}, Cost: ${card.mana_cost} (${card.cmc} cmc)`);
     });
 }
-
+var allCardsNotReprint = [];
+var allCardsWithReprint = [];
 $(document).ready(function(){
 
     $("button[name=send-cat]").click(function(event){
-        var thing = {Name: "Heck", Stuff: [1, 2, 3, 4, 5]};
-        console.log(JSON.stringify(thing));
-        $.ajax({
-            url: "/catto",
-            type: "POST",
-            traditional: true,
-            dataType: "json",
-            data: {input: [JSON.stringify(cat)]},
-            success: function(data){
-                console.log(data);
-            },
-            error: ಠ_ಠ
+        var query = encodeURI($("input[name=scryfall-query-input]").val());
+        getAllCardsFromScryfallQuery(`https://api.scryfall.com/cards/search?q=${query}`, function(result){
+            var toSend = [];
+            result.forEach(function(item){
+                toSend.push(JSON.stringify(item));
+            });
+            $.ajax({
+                url: "/mtg",
+                type: "POST",
+                dataType: "json",
+                data: {cards: toSend},
+                success: function(data){
+                    $("#card-display").text("");
+                    console.log("\nGot the following cards from the server:")
+                    data.forEach(function(item){
+                        console.log(item);
+                        $("#card-display").append(`<li>${item}</li>`);
+                    })
+                },
+                error: ಠ_ಠ
+            });
         });
     });
 

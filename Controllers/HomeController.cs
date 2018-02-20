@@ -23,16 +23,18 @@ namespace Test.Controllers
             return number;
         }
 
-        [HttpPost("/catto")]
-        public JsonResult AddCatto(string[] input)
+        [HttpPost("/mtg")]
+        public string[] GetMagicCard(string[] cards)
         {
-
-            Cat cat = JsonConvert.DeserializeObject<Cat>(input[0]);
-
-            Console.WriteLine($"Kitty Name: {cat.name}");
-            Console.WriteLine($"Kitty Breed: {cat.breed}");
-
-            return Json(true);
+            Console.WriteLine($"\nGot a new batch of {cards.Length} cards.");
+            List<string> output = new List<string>();
+            foreach(string cardString in cards)
+            {
+                dynamic card = JsonConvert.DeserializeObject(cardString);
+                Console.WriteLine(card.name);
+                output.Add((string)card.name);
+            }
+            return output.ToArray();
         }
 
         [HttpPost("/heck")]
