@@ -15,6 +15,45 @@ var writeHeckDisplay = function(data){
         $("#heckdisplay").append(`<li>${"🤔".repeat(times)}</li>`);
     })
 }
+var tempOutput = [];
+var otherOutput = [];
+
+function getAllCardsFromScryfallQuery(queryString, finished, cards = []){
+
+    var ajaxcall = {
+        url: queryString,
+        type: "GET",
+        dataType: "json",
+        success: function(result)
+        {
+            cards.push.apply(cards, result.data);
+
+            if(result.has_more){
+                setTimeout(function(){getAllCardsFromScryfallQuery(result.next_page, finished, cards);}, 50);
+            } else {
+                finished(cards);
+            }
+        },
+        error: ಠ_ಠ
+    }
+    $.ajax(ajaxcall);
+}
+
+function setTempOutputAndPrint(cards){
+    console.log(cards);
+    tempOutput = cards;
+}
+
+function setOtherOutputAndPrint(cards){
+    otherOutput = cards;
+}
+
+function setTempOutputAndPrintAllCards(cards){
+    setTempOutputAndPrint(cards);
+    cards.forEach(function(card){
+        console.log(`Name: ${card.name}, Cost: ${card.mana_cost} (${card.cmc} cmc)`);
+    });
+}
 
 $(document).ready(function(){
 
