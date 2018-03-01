@@ -28,6 +28,7 @@ function getAllCardsFromScryfallQuery(queryString, finished, cards = []){
         {
             cards.push.apply(cards, result.data);
             if(result.has_more){
+                console.log(`Got ${cards.length} results. Getting next page.`);
                 setTimeout(function(){getAllCardsFromScryfallQuery(result.next_page, finished, cards);}, 50);
             } else {
                 finished(cards);
@@ -38,21 +39,29 @@ function getAllCardsFromScryfallQuery(queryString, finished, cards = []){
     $.ajax(ajaxcall);
 }
 
-function setTempOutputAndPrint(cards){
-    console.log(cards);
-    tempOutput = cards;
+function compareQueries(results1, results2){
+    var output = [];
+    for(var i = 0; i < results1.length; i++){
+        var r1item = results1[i];
+        let foundMatch = false;
+
+        for(var j = 0; j < results2.length; j++){
+            var r2item = results2[j];
+            if(r1item.oracle_id === r2item.oracle_id){
+                results2.splice(j, 1);
+                foundMatch = true;
+                break;
+            }
+        }
+
+        if(!foundMatch){
+            output.push(r1item);
+        }
+    }
+
+    return output;
 }
 
-function setOtherOutputAndPrint(cards){
-    otherOutput = cards;
-}
-
-function setTempOutputAndPrintAllCards(cards){
-    setTempOutputAndPrint(cards);
-    cards.forEach(function(card){
-        console.log(`Name: ${card.name}, Cost: ${card.mana_cost} (${card.cmc} cmc)`);
-    });
-}
 var allCardsNotReprint = [];
 var allCardsWithReprint = [];
 $(document).ready(function(){
